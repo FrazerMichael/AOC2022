@@ -6,7 +6,8 @@ with open('rock_paper_scissors_input') as file:
     for each in file:
         rpsThrows.append(each.strip().split(' '))
 
-def winner(opp, me):
+#Part 1
+def winner(opp = '', me = ''):
     myThrow = ''
     throwScore = 0
 
@@ -38,10 +39,46 @@ def winner(opp, me):
         else:
             return 6, throwScore
 
-total = 0
+
+#Part2
+
+def throwCalculator(opp, result):
+    if result == 'X':
+        if opp == 'A':
+            return 3
+        elif opp == 'B':
+            return 1
+        else:
+            return 2
+    elif result == 'Y':
+        if opp == 'A':
+            return 4
+        elif opp == 'B':
+            return 5
+        else:
+            return 6
+    else:
+        if opp == 'A':
+            return 8
+        elif opp == 'B':
+            return 9
+        else:
+            return 7
+
+
+part1 = 0
 
 for i in range(len(rpsThrows)):
-    total += sum(winner(rpsThrows[i][0], rpsThrows[i][1]))
+    part1 += sum(winner(rpsThrows[i][0], rpsThrows[i][1]))
+
+part2 = 0
+test = []
+for i in range(len(rpsThrows)):
+    test.append(throwCalculator(rpsThrows[i][0], rpsThrows[i][1]))
+    part2 += throwCalculator(rpsThrows[i][0], rpsThrows[i][1])
 
 print('The answer for part 1:')
-print(total)
+print(part1)
+
+print('The answer for part 2:')
+print(part2)
