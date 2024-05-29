@@ -1,0 +1,64 @@
+#Advent of Code Day 7
+#Michael Frazer
+
+from tempfile import tempdir
+
+
+with open("Day7/file-trash.txt") as file:
+    filesFormed = file.read().splitlines()
+
+#print(filesFormed)
+
+#Function that returns a dictionary of directories and how big they are
+def fileSystemDirectories(file):
+    directories = {'/home': 0}
+    currentDirectory = ''
+    for each in file:
+        if each[0] == '$':
+            if each[2:4] == 'ls':
+                pass
+            else:
+                if each[2:4] == 'cd':
+                    if each[5] == '/':
+                        currentDirectory = '/home'
+                    elif each[5:] == '..':
+                        currentDirectory = currentDirectory[:currentDirectory.rindex('/')]
+                    else:
+                        currentDirectory = currentDirectory + '/' + each[5:]
+                        directories[currentDirectory] = 0
+        
+        else:
+            if each[0] != 'd':
+                tempPath = currentDirectory
+                while tempPath != '':
+                    directories[tempPath] += int(each[:each.index(' ')])
+                    tempPath = tempPath[:tempPath.rindex('/')]
+                    
+
+    return directories
+    
+print(fileSystemDirectories(filesFormed))
+
+def taskOne(file: dict):
+    count = 0
+    for each in file.values():
+        if int(each) <= 100000:
+            count += each
+
+    return str(count)
+
+def taskTwo(file: dict):
+    goal = int(file['/home']) - 40000000
+    best = 0
+    
+    for each in file.values():
+        if int(each) >= goal:
+            if int(each) - goal < abs(best - goal):
+                best = int(each)
+
+    return str(best)
+
+
+
+print('Task One: ' + taskOne(fileSystemDirectories(filesFormed)))
+print('Task Two: ' + taskTwo(fileSystemDirectories(filesFormed)))
